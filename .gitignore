@@ -1,0 +1,9 @@
+# Build output
+mu
+.build/
+
+# macOS
+.DS_Store
+
+# Test files
+test.txt
