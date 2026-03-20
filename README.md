@@ -16,7 +16,7 @@ Terminal editors are fast but modal. GUI editors are friendly but slow. mu is bo
 ## Install
 
 ```bash
-curl -fsSL https://github.com/T45K/mu/releases/latest/download/mu -o ~/.local/bin/mu
+curl -fsSL https://github.com/T45K/mu/releases/download/v0.1.0/mu -o ~/.local/bin/mu
 chmod +x ~/.local/bin/mu
 ```
 
