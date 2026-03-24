@@ -2,18 +2,21 @@ import AppKit
 
 // MARK: - Parse command line arguments
 
-guard CommandLine.arguments.count == 2 else {
-    fputs("Usage: mu <filename>\n", stderr)
-    exit(1)
-}
-
-let filename = CommandLine.arguments[1]
 let fileURL: URL
-if filename.hasPrefix("/") {
-    fileURL = URL(fileURLWithPath: filename)
+let clearContents: Bool
+
+if CommandLine.arguments.count >= 2 {
+    let filename = CommandLine.arguments[1]
+    if filename.hasPrefix("/") {
+        fileURL = URL(fileURLWithPath: filename)
+    } else {
+        let cwd = FileManager.default.currentDirectoryPath
+        fileURL = URL(fileURLWithPath: cwd).appendingPathComponent(filename)
+    }
+    clearContents = false
 } else {
-    let cwd = FileManager.default.currentDirectoryPath
-    fileURL = URL(fileURLWithPath: cwd).appendingPathComponent(filename)
+    fileURL = URL(fileURLWithPath: "/tmp/mu.txt")
+    clearContents = true
 }
 
 // MARK: - Application setup
@@ -25,9 +28,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let window: NSWindow
     let textView: NSTextView
     let filePath: URL
+    let clearContents: Bool
 
-    init(filePath: URL) {
+    init(filePath: URL, clearContents: Bool) {
         self.filePath = filePath
+        self.clearContents = clearContents
 
         // Window
         let contentRect = NSRect(x: 0, y: 0, width: 800, height: 600)
@@ -67,8 +72,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        // Load file if it exists
-        if FileManager.default.fileExists(atPath: filePath.path) {
+        if clearContents {
+            // Create or truncate the file
+            FileManager.default.createFile(atPath: filePath.path, contents: nil)
+            textView.string = ""
+        } else if FileManager.default.fileExists(atPath: filePath.path) {
             do {
                 let content = try String(contentsOf: filePath, encoding: .utf8)
                 textView.string = content
@@ -150,7 +158,7 @@ func buildMenu() {
 
 // MARK: - Run
 
-let delegate = AppDelegate(filePath: fileURL)
+let delegate = AppDelegate(filePath: fileURL, clearContents: clearContents)
 app.delegate = delegate
 buildMenu()
 app.run()

@@ -31,6 +31,7 @@ ln -sf "$(pwd)/mu" ~/.local/bin/mu    # or wherever your PATH points
 
 ```bash
 mu filename.txt        # open existing file or create new
+mu                     # open a scratch buffer (/tmp/mu.txt, cleared on each launch)
 ```
 
 That's it.
