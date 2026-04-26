@@ -7,3 +7,6 @@ mu
 
 # Test files
 test.txt
+
+# Junie local memory
+.junie/memory
