@@ -24,6 +24,17 @@ if CommandLine.arguments.count >= 2 {
 let app = NSApplication.shared
 app.setActivationPolicy(.accessory)
 
+final class PlainTextTextView: NSTextView {
+    override func paste(_ sender: Any?) {
+        guard let plainText = NSPasteboard.general.string(forType: .string) else {
+            super.paste(sender)
+            return
+        }
+
+        insertText(plainText, replacementRange: selectedRange())
+    }
+}
+
 class AppDelegate: NSObject, NSApplicationDelegate {
     let window: NSWindow
     let textView: NSTextView
@@ -51,7 +62,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         scrollView.hasHorizontalScroller = false
         scrollView.autoresizingMask = [.width, .height]
 
-        textView = NSTextView(frame: scrollView.contentView.bounds)
+        textView = PlainTextTextView(frame: scrollView.contentView.bounds)
         textView.autoresizingMask = [.width, .height]
         textView.isEditable = true
         textView.isSelectable = true
