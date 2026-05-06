@@ -12,11 +12,12 @@ Terminal editors are fast but modal. GUI editors are friendly but slow. mu is bo
 - **Zero learning curve** — if you can use TextEdit, you can use mu
 - **Terminal-first** — launched from the command line, stays out of your Dock
 - **One job, done well** — edit text, save with `⌘S`, done
+- **Line-aware** — line numbers are always visible, and `⌘L` jumps straight to a line
 
 ## Install
 
 ```bash
-curl -fsSL https://github.com/T45K/mu/releases/download/v0.1.2/mu -o ~/.local/bin/mu
+curl -fsSL https://github.com/T45K/mu/releases/download/v0.2.0/mu -o ~/.local/bin/mu
 chmod +x ~/.local/bin/mu
 ```
 
@@ -50,12 +51,14 @@ mu follows standard macOS conventions. Everything works the way you expect:
 | `Return` / `⇧Return` in Find | Find Next / Previous |
 | `Esc` in Find | Close Find |
 | `⌘G` / `⇧⌘G` | Find Next / Previous |
+| `⌘L` | Show Go to Line |
 | `⌘Q` / `⌘W` | Quit |
 | `⌃A` / `⌃E` | Beginning / End of line |
 | `⌥←` / `⌥→` | Word navigation |
 | ... | Every other standard macOS text keybinding |
 
 Find is case-insensitive and wraps around when it reaches the beginning or end of the document.
+Line numbers are shown in the left gutter, including an empty final line after a trailing newline. Press `⌘L`, type a line number in the lightweight inline field, and press `Return` to move the cursor to the start of that line.
 
 ## Requirements
 

@@ -100,7 +100,55 @@ struct TextSearchTests {
             nil
         )
 
+        expectLineLocation("line 1 starts at beginning", LineNavigator.location(ofLine: 1, in: "alpha\nbeta"), 0)
+        expectLineLocation("line 2 starts after newline", LineNavigator.location(ofLine: 2, in: "alpha\nbeta"), 6)
+        expectLineLocation("trailing newline creates empty line", LineNavigator.location(ofLine: 2, in: "alpha\n"), 6)
+        expectLineLocation("CRLF is one line break", LineNavigator.location(ofLine: 2, in: "alpha\r\nbeta"), 7)
+        expectLineLocation("line zero is invalid", LineNavigator.location(ofLine: 0, in: "alpha"), nil)
+        expectLineLocation("line past end is invalid", LineNavigator.location(ofLine: 3, in: "alpha\nbeta"), nil)
+
+        expectLineNumber("line number at beginning", LineNavigator.lineNumber(at: 0, in: "alpha\nbeta"), 1)
+        expectLineNumber("line number after newline", LineNavigator.lineNumber(at: 6, in: "alpha\nbeta"), 2)
+        expectLineNumber("line number clamps beyond end", LineNavigator.lineNumber(at: 99, in: "alpha\nbeta"), 2)
+
+        expectLineCount("empty text has one line", LineNavigator.lineCount(in: ""), 1)
+        expectLineCount("counts LF lines", LineNavigator.lineCount(in: "alpha\nbeta\ngamma"), 3)
+        expectLineCount("counts CRLF lines", LineNavigator.lineCount(in: "alpha\r\nbeta"), 2)
+        expectLineCount("trailing LF counts empty final line", LineNavigator.lineCount(in: "alpha\n"), 2)
+        expectLineCount("trailing CRLF counts empty final line", LineNavigator.lineCount(in: "alpha\r\n"), 2)
+        expectBoolean("detects trailing LF", LineNavigator.hasTrailingLineBreak(in: "alpha\n"), true)
+        expectBoolean("detects trailing CRLF", LineNavigator.hasTrailingLineBreak(in: "alpha\r\n"), true)
+        expectBoolean("detects no trailing line break", LineNavigator.hasTrailingLineBreak(in: "alpha"), false)
+
         if failures > 0 {
+            exit(1)
+        }
+    }
+
+    private static func expectLineLocation(_ name: String, _ actual: Int?, _ expected: Int?) {
+        if actual != expected {
+            print("FAIL: \(name): expected \(describe(expected)), got \(describe(actual))")
+            exit(1)
+        }
+    }
+
+    private static func expectLineNumber(_ name: String, _ actual: Int, _ expected: Int) {
+        if actual != expected {
+            print("FAIL: \(name): expected \(expected), got \(actual)")
+            exit(1)
+        }
+    }
+
+    private static func expectLineCount(_ name: String, _ actual: Int, _ expected: Int) {
+        if actual != expected {
+            print("FAIL: \(name): expected \(expected), got \(actual)")
+            exit(1)
+        }
+    }
+
+    private static func expectBoolean(_ name: String, _ actual: Bool, _ expected: Bool) {
+        if actual != expected {
+            print("FAIL: \(name): expected \(expected), got \(actual)")
             exit(1)
         }
     }
@@ -111,5 +159,13 @@ struct TextSearchTests {
         }
 
         return "{\(range.location), \(range.length)}"
+    }
+
+    private static func describe(_ value: Int?) -> String {
+        guard let value else {
+            return "nil"
+        }
+
+        return "\(value)"
     }
 }
