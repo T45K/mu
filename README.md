@@ -47,11 +47,15 @@ mu follows standard macOS conventions. Everything works the way you expect:
 | `⌘C` / `⌘V` / `⌘X` | Copy / Paste / Cut |
 | `⌘A` | Select All |
 | `⌘F` | Find |
+| `Return` / `⇧Return` in Find | Find Next / Previous |
+| `Esc` in Find | Close Find |
 | `⌘G` / `⇧⌘G` | Find Next / Previous |
 | `⌘Q` / `⌘W` | Quit |
 | `⌃A` / `⌃E` | Beginning / End of line |
 | `⌥←` / `⌥→` | Word navigation |
 | ... | Every other standard macOS text keybinding |
+
+Find is case-insensitive and wraps around when it reaches the beginning or end of the document.
 
 ## Requirements
 
